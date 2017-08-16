@@ -106,6 +106,20 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             Constants.LicenseTypeWindowsServer)]
         public string LicenseType { get; set; }
 
+        // <summary>
+        /// Gets or sets the target availability set ARM Id (for V2).
+        /// </summary>
+        [Parameter]
+        [ValidateNotNullOrEmpty]
+        public string RecoveryAvailabilitySetId { get; set; }
+
+        // <summary>
+        /// Gets or sets the managed Disk (for V2).
+        /// </summary>
+        [Parameter]
+        [ValidateNotNullOrEmpty]
+        public string UseManagedDisks { get; set; }
+
         #endregion Parameters
 
         /// <summary>
@@ -138,6 +152,8 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 string.IsNullOrEmpty(this.Size) &&
                 string.IsNullOrEmpty(this.PrimaryNic) &&
                 string.IsNullOrEmpty(this.RecoveryNetworkId) &&
+                string.IsNullOrEmpty(this.UseManagedDisks) &&
+                this.RecoveryAvailabilitySetId != null &&
                 string.IsNullOrEmpty(this.RecoveryResourceGroupId) &&
                 string.IsNullOrEmpty(this.LicenseType))
             {
@@ -158,6 +174,8 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             string vmRecoveryNetworkId = this.RecoveryNetworkId;
             string vmRecoveryResourceGroupId = this.RecoveryResourceGroupId;
             string licenseType = this.LicenseType;
+            string availabilitySetId = this.RecoveryAvailabilitySetId;
+            string useManagedDisk = this.UseManagedDisks;
             List<VMNicInputDetails> vMNicInputDetailsList = new List<VMNicInputDetails>();
             VMNicDetails vMNicDetailsToBeUpdated;
             
@@ -187,24 +205,37 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     licenseType = providerSpecificDetails.LicenseType;
                 }
 
+                if (string.IsNullOrEmpty(this.RecoveryAvailabilitySetId))
+                {
+                    availabilitySetId = providerSpecificDetails.RecoveryAvailabilitySetId;
+                }
+
                 if (string.IsNullOrEmpty(this.RecoveryResourceGroupId))
                 {
                     vmRecoveryResourceGroupId = providerSpecificDetails.RecoveryAzureResourceGroupId;
                 }
 
+                if (string.IsNullOrEmpty(this.UseManagedDisks))
+                {
+                    useManagedDisk = providerSpecificDetails.UseManagedDisks;
+                }
+
                 string deploymentType = Utilities.GetValueFromArmId(providerSpecificDetails.RecoveryAzureStorageAccount, ARMResourceTypeConstants.Providers);
                 if (deploymentType.ToLower().Contains(Constants.Classic.ToLower()))
                 {
-                    providerSpecificInput = new InMageAzureV2UpdateReplicationProtectedItemInput()
+                    providerSpecificInput = new HyperVReplicaAzureUpdateReplicationProtectedItemInput()
                     {
-                        RecoveryAzureV1ResourceGroupId = vmRecoveryResourceGroupId
+                        RecoveryAzureV1ResourceGroupId = vmRecoveryResourceGroupId,
+                        RecoveryAzureV2ResourceGroupId = null
                     };
                 }
                 else
                 {
-                    providerSpecificInput = new InMageAzureV2UpdateReplicationProtectedItemInput()
+                    providerSpecificInput = new HyperVReplicaAzureUpdateReplicationProtectedItemInput()
                     {
-                        RecoveryAzureV2ResourceGroupId = this.RecoveryResourceGroupId
+                        RecoveryAzureV2ResourceGroupId = vmRecoveryResourceGroupId,
+                        RecoveryAzureV1ResourceGroupId = null,
+                        UseManagedDisks = useManagedDisk
                     };
                 }
 
@@ -284,9 +315,19 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     licenseType = providerSpecificDetails.LicenseType;
                 }
 
+                if (string.IsNullOrEmpty(this.RecoveryAvailabilitySetId))
+                {
+                    availabilitySetId = providerSpecificDetails.RecoveryAvailabilitySetId;
+                }
+
                 if (string.IsNullOrEmpty(this.RecoveryResourceGroupId))
                 {
                     vmRecoveryResourceGroupId = providerSpecificDetails.RecoveryAzureResourceGroupId;
+                }
+
+                if (string.IsNullOrEmpty(this.UseManagedDisks))
+                {
+                    useManagedDisk = providerSpecificDetails.UseManagedDisks;
                 }
 
                 string deploymentType = Utilities.GetValueFromArmId(providerSpecificDetails.RecoveryAzureStorageAccount, ARMResourceTypeConstants.Providers);
@@ -294,14 +335,17 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 {
                     providerSpecificInput = new InMageAzureV2UpdateReplicationProtectedItemInput()
                     {
-                        RecoveryAzureV1ResourceGroupId = vmRecoveryResourceGroupId
+                        RecoveryAzureV1ResourceGroupId = vmRecoveryResourceGroupId,
+                        RecoveryAzureV2ResourceGroupId = null
                     };
                 }
                 else
                 {
                     providerSpecificInput = new InMageAzureV2UpdateReplicationProtectedItemInput()
                     {
-                        RecoveryAzureV2ResourceGroupId = this.RecoveryResourceGroupId
+                        RecoveryAzureV2ResourceGroupId = vmRecoveryResourceGroupId,
+                        RecoveryAzureV1ResourceGroupId = null,
+                        UseManagedDisks = useManagedDisk
                     };
                 }                
 
@@ -364,6 +408,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     SelectedRecoveryAzureNetworkId = vmRecoveryNetworkId,
                     VmNics = vMNicInputDetailsList,
                     LicenseType = licenseType,
+                    RecoveryAvailabilitySetId = availabilitySetId,
                     ProviderSpecificDetails = providerSpecificInput
                 };
 
