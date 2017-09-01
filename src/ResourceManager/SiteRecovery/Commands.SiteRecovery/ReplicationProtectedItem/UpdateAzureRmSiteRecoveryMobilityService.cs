@@ -58,7 +58,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         [Parameter(ParameterSetName = ASRParameterSets.Default, Mandatory = true)]
         [ValidateNotNullOrEmpty]
-        public RunAsAccount Account { get; set; }
+        public ASRRunAsAccount Account { get; set; }
 
         #endregion Parameters
 
