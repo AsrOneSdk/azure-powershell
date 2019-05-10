@@ -1183,6 +1183,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
             this.RecoveryAzureCloudService = details.RecoveryCloudService;
             this.RecoveryFabricLocation = details.RecoveryFabricLocation;
             this.RecoveryAvailabilitySet = details.RecoveryAvailabilitySet;
+            this.RecoveryAvailabilityZone = details.RecoveryAvailabilityZone;
             this.TestFailoverRecoveryFabricObjectId = details.TestFailoverRecoveryFabricObjectId;
             this.MonitoringJobType = details.MonitoringJobType;
             this.MonitoringPercentageCompletion = details.MonitoringPercentageCompletion;
@@ -1214,7 +1215,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                 .ConvertAll(disk => new ASRAzureToAzureProtectedDiskDetails(disk)));
             }
 
-            if (details.UnprotectedDisks != null && details.UnprotectedDisks.Count > 0)
+           if (details.UnprotectedDisks != null && details.UnprotectedDisks.Count > 0)
             {
                 this.A2AUnprotectedDiskDetails = new List<A2AUnprotectedDiskDetails>();
                 foreach (var unprotectedDisk in details.UnprotectedDisks)
@@ -1280,6 +1281,11 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
         /// Recovery availability set.
         /// </summary>
         public string RecoveryAvailabilitySet { get; set; }
+
+        /// <summary>
+        /// Recovery availability zone.
+        /// </summary>
+        public string RecoveryAvailabilityZone { get; set; }
 
         /// <summary>
         /// Synced configuration details of the virtual machine.

@@ -28,8 +28,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
         ///     Removes Replicated Protected Item.
         /// </summary>
         /// <param name="fabricName">Fabric Name</param>
-        /// <param name="protectionContainerName">Protection Container ID</param>
-        /// <param name="replicationProtectedItemName">Virtual Machine ID or Replication group Id</param>
+        /// <param name="protectionContainerName">Protection Container Name</param>
+        /// <param name="replicationProtectedItemName">Replication Protected Item Name</param>
         /// <param name="input">Disable protection input.</param>
         /// <returns>Job response</returns>
         public PSSiteRecoveryLongRunningOperation DisableProtection(
@@ -56,8 +56,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
         ///     Creates Replicated Protected Item.
         /// </summary>
         /// <param name="fabricName">Fabric Name</param>
-        /// <param name="protectionContainerName">Protection Container ID</param>
-        /// <param name="replicationProtectedItemName">Virtual Machine ID or Replication group Id</param>
+        /// <param name="protectionContainerName">Protection Container Name</param>
+        /// <param name="replicationProtectedItemName">Replication Protected Item Name</param>
         /// <param name="input">Enable protection input.</param>
         /// <returns>Job response</returns>
         public PSSiteRecoveryLongRunningOperation EnableProtection(
@@ -81,11 +81,11 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
         }
 
         /// <summary>
-        /// Add disks to replicated protected item.
+        /// Add disks to replication protected item.
         /// </summary>
         /// <param name="fabricName">Fabric Name</param>
-        /// <param name="protectionContainerName">Protection Container ID</param>
-        /// <param name="replicationProtectedItemName">Virtual Machine ID or Replication group Id</param>
+        /// <param name="protectionContainerName">Protection Container Name</param>
+        /// <param name="replicationProtectedItemName">Replication Protected Item Name</param>
         /// <param name="input">Add disks input.</param>
         /// <returns>Job response</returns>
         public PSSiteRecoveryLongRunningOperation AddDisks(
@@ -96,6 +96,62 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
         {
             var op = this.GetSiteRecoveryClient()
                 .ReplicationProtectedItems.BeginAddDisksWithHttpMessagesAsync(
+                    fabricName,
+                    protectionContainerName,
+                    replicationProtectedItemName,
+                    input,
+                    this.GetRequestHeaders(true))
+                .GetAwaiter()
+                .GetResult();
+
+            var result = SiteRecoveryAutoMapperProfile.Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
+            return result;
+        }
+
+        /// <summary>
+        /// Remove disks from replication protected item.
+        /// </summary>
+        /// <param name="fabricName">Fabric Name</param>
+        /// <param name="protectionContainerName">Protection Container Name</param>
+        /// <param name="replicationProtectedItemName">Replication Protected Item Name</param>
+        /// <param name="input">Remove disks input.</param>
+        /// <returns>Job response</returns>
+        public PSSiteRecoveryLongRunningOperation RemoveDisks(
+            string fabricName,
+            string protectionContainerName,
+            string replicationProtectedItemName,
+            RemoveDisksInput input)
+        {
+            var op = this.GetSiteRecoveryClient()
+                .ReplicationProtectedItems.BeginRemoveDisksWithHttpMessagesAsync(
+                    fabricName,
+                    protectionContainerName,
+                    replicationProtectedItemName,
+                    input,
+                    this.GetRequestHeaders(true))
+                .GetAwaiter()
+                .GetResult();
+
+            var result = SiteRecoveryAutoMapperProfile.Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
+            return result;
+        }
+
+        /// <summary>
+        /// Removes the Health error from replication protected item.
+        /// </summary>
+        /// <param name="fabricName">Fabric Name</param>
+        /// <param name="protectionContainerName">Protection Container Name</param>
+        /// <param name="replicationProtectedItemName">Replication Protected Item Name</param>
+        /// <param name="input">Remove disks input.</param>
+        /// <returns>Job response</returns>
+        public PSSiteRecoveryLongRunningOperation ResolveHealthError(
+            string fabricName,
+            string protectionContainerName,
+            string replicationProtectedItemName,
+            ResolveHealthInput input)
+        {
+            var op = this.GetSiteRecoveryClient()
+                .ReplicationProtectedItems.BeginResolveHealthErrorsWithHttpMessagesAsync(
                     fabricName,
                     protectionContainerName,
                     replicationProtectedItemName,
