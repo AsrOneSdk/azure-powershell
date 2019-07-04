@@ -23,4 +23,8 @@
     <ProjectReference Include="..\RecoveryServices.Backup.ServiceClientAdapter\RecoveryServices.Backup.ServiceClientAdapter.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="Microsoft.Rest.ClientRuntime" Version="2.3.20" />
+  </ItemGroup>
+
 </Project>

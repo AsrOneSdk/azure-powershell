@@ -30,4 +30,8 @@
     <Compile Include="$(StorageToolsPath)Adapters\WindowsAzure.Storage.6\AzureStorageContext.cs" Link="Common\AzureStorageContext.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="Microsoft.Rest.ClientRuntime" Version="2.3.20" />
+  </ItemGroup>
+
 </Project>
