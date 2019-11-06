@@ -32,11 +32,11 @@ namespace RecoveryServices.SiteRecovery.Test
 
             this.PowershellHelperFile = System.IO.Path.Combine(
                 System.AppDomain.CurrentDomain.BaseDirectory,
-                "ScenarioTests\\A2A\\A2ATestsHelper.ps1");
+                "ScenarioTests", "A2A", "A2ATestsHelper.ps1");
 
-            this.PowershellFile = System.IO.Path.Combine(
+           this.PowershellFile = System.IO.Path.Combine(
                 System.AppDomain.CurrentDomain.BaseDirectory,
-                "ScenarioTests\\A2A\\AsrA2ATests.ps1");
+                "ScenarioTests", "A2A", "AsrA2ATests.ps1");
             this.Initialize();
         }
 
@@ -80,6 +80,20 @@ namespace RecoveryServices.SiteRecovery.Test
         public void A2ANewAsrReplicationProtectedItemDisk()
         {
             this.RunPowerShellTest(_logger, Constants.NewModel, "Test-AddReplicationProtectedItemDisk");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void A2ARemoveReplicationProtectedItemDisk()
+        {
+            this.RunPowerShellTest(_logger, Constants.NewModel, "Test-RemoveReplicationProtectedItemDisk");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void A2ARemoveReplicationProtectedItemHealthError()
+        {
+            this.RunPowerShellTest(_logger, Constants.NewModel, "Test-ResolveHealthError");
         }
     }
 }
