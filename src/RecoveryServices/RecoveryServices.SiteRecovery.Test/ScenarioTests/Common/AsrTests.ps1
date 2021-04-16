@@ -199,7 +199,7 @@ function Test-AsrEvent
     $e = Get-AzRecoveryServicesAsrEvent -AffectedObjectFriendlyName $Events[0].AffectedObjectFriendlyName
     Assert-NotNull($e)
     
-    $startTime = (Get-Date).AddDays(-3)
+    $startTime = "4/4/2021 10:57:32 AM"
     $e = Get-AzRecoveryServicesAsrEvent -StartTime $startTime
     Assert-NotNull($e)
 
@@ -237,8 +237,9 @@ function Test-Job
 
     Assert-NotNull($jobList)
 
-    $startTime = (Get-Date).AddDays(-3)
-    $endTime = Get-Date
+    $startTime = "2021-04-04T05:28:32.1338170Z"
+    $endTime = "2021-04-07T05:28:32.1391983Z"
+
     $jobList = Get-AzRecoveryServicesAsrJob -StartTime $startTime -EndTime $endTime
     Assert-NotNull($jobList)
 
