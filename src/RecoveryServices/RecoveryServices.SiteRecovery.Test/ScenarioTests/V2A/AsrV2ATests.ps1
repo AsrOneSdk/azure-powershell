@@ -420,7 +420,7 @@ function V2ACreateRPI
     $Account = $fabric.FabricSpecificDetails.RunAsAccounts[1]
     $ProcessServer = $fabric.fabricSpecificDetails.ProcessServers[0]
 
-    $EnableDRjob = New-AzRecoveryServicesAsrReplicationProtectedItem -VMwareToAzure -ProtectableItem $pi -Name $rpiName -ProtectionContainerMapping $pcm -ProcessServer $ProcessServer -Account $Account -RecoveryResourceGroupId $RecoveryResourceGroupId -logStorageAccountId $RecoveryAzureStorageAccountId -RecoveryAzureNetworkId $AzureVmNetworkId -RecoveryAzureSubnetName $Subnet
+    $EnableDRjob = New-AzRecoveryServicesAsrReplicationProtectedItem -VMwareToAzure -ProtectableItem $pi -Name "V2A-W2K16-201-new" -ProtectionContainerMapping $pcm -ProcessServer $ProcessServer -Account $Account -RecoveryResourceGroupId $RecoveryResourceGroupId -logStorageAccountId $RecoveryAzureStorageAccountId -RecoveryAzureNetworkId $AzureVmNetworkId -RecoveryAzureSubnetName $Subnet
     WaitForJobCompletion -JobId $EnableDRjob.Name
 }
 
@@ -471,7 +471,7 @@ function V2ATestResync
 
     $fabric =  Get-AsrFabric -FriendlyName $PrimaryFabricName
     $pc =  Get-ASRProtectionContainer -FriendlyName $pcName -Fabric $fabric
-    $rpi = get-AzRecoveryServicesAsrReplicationProtectedItem -ProtectionContainer $pc -Name $rpiName
+    $rpi = get-AzRecoveryServicesAsrReplicationProtectedItem -ProtectionContainer $pc -Name "V2A-W2K16-201-new"
     $job = Start-AzRecoveryServicesAsrResynchronizeReplicationJob -ReplicationProtectedItem $rpi
     WaitForJobCompletion -JobId $Job.Name
 }
@@ -538,7 +538,7 @@ function V2ATestFailoverJob
     $fabric =  Get-AsrFabric -FriendlyName $PrimaryFabricName
     $pc =  Get-ASRProtectionContainer -FriendlyName $pcName -Fabric $fabric
     
-    $rpi = get-AzRecoveryServicesAsrReplicationProtectedItem -ProtectionContainer $pc -Name $rpiName
+    $rpi = get-AzRecoveryServicesAsrReplicationProtectedItem -ProtectionContainer $pc -Name "V2A-W2K16-201-new"
     ## do network mapping
     do
     {
@@ -668,7 +668,7 @@ function Test-SetRPI
         Import-AzRecoveryServicesAsrVaultSettingsFile -Path $vaultSettingsFilePath
         $fabric =  Get-AsrFabric -FriendlyName $PrimaryFabricName
         $pc =  Get-ASRProtectionContainer -FriendlyName $pcName -Fabric $fabric
-        $rpi = get-AzRecoveryServicesAsrReplicationProtectedItem -ProtectionContainer $pc -Name $rpiName
+        $rpi = get-AzRecoveryServicesAsrReplicationProtectedItem -ProtectionContainer $pc -Name "V2A-W2K16-201-new"
         Set-AzRecoveryServicesAsrReplicationProtectedItem -InputObject $rpi -UpdateNic $rpi.nicDetailsList[0].nicId -PrimaryNic $rpi.nicDetailsList[0].nicId -RecoveryNetworkId `
                         $AzureVmNetworkId -RecoveryNicStaticIPAddress $staticIp -RecoveryNicSubnetName $Subnet -UseManagedDisk "True"
     
