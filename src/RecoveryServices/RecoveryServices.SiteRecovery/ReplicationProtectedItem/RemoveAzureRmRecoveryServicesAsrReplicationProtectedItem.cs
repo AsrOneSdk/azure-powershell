@@ -95,6 +95,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                     this.response = this.RecoveryServicesClient.DisableProtection(
                         Utilities.GetValueFromArmId(
                             this.InputObject.ID,
+                            ARMResourceTypeConstants.ResourceGroups),
+                        Utilities.GetValueFromArmId(
+                            this.InputObject.ID,
+                            ARMResourceTypeConstants.RecoveryServicesVault),
+                        Utilities.GetValueFromArmId(
+                            this.InputObject.ID,
                             ARMResourceTypeConstants.ReplicationFabrics),
                         Utilities.GetValueFromArmId(
                             this.InputObject.ID,
@@ -105,6 +111,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                 else
                 {
                     this.response = this.RecoveryServicesClient.PurgeProtection(
+                        Utilities.GetValueFromArmId(
+                            this.InputObject.ID,
+                            ARMResourceTypeConstants.ResourceGroups),
+                        Utilities.GetValueFromArmId(
+                            this.InputObject.ID,
+                            ARMResourceTypeConstants.RecoveryServicesVault),
                         Utilities.GetValueFromArmId(
                             this.InputObject.ID,
                             ARMResourceTypeConstants.ReplicationFabrics),

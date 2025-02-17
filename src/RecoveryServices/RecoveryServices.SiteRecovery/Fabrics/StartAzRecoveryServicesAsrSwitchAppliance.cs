@@ -104,8 +104,18 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                     Properties = updateApplianceInput
                 };
 
+                var resourceGroupName = Utilities.GetValueFromArmId(
+                    this.ReplicationProtectedItem.ID,
+                    ARMResourceTypeConstants.ResourceGroups);
+
+                var vaultName = Utilities.GetValueFromArmId(
+                    this.ReplicationProtectedItem.ID,
+                    ARMResourceTypeConstants.RecoveryServicesVault);
+
                 // Switch the appliance for protected item.
                 var response = this.RecoveryServicesClient.SwitchAppliance(
+                    resourceGroupName,
+                    vaultName,
                     fabricName,
                     protectionContainerName,
                     this.ReplicationProtectedItem.Name,

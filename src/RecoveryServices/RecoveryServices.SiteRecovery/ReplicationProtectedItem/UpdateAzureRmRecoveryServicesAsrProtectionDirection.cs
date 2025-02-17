@@ -471,6 +471,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
             // fetch the latest Protectable item objects
             var replicationProtectedItemResponse = this.RecoveryServicesClient
                 .GetAzureSiteRecoveryReplicationProtectedItem(
+                    Utilities.GetValueFromArmId(
+                        this.ReplicationProtectedItem.ID,
+                        ARMResourceTypeConstants.ResourceGroups),
+                    Utilities.GetValueFromArmId(
+                        this.ReplicationProtectedItem.ID,
+                        ARMResourceTypeConstants.RecoveryServicesVault),
                     this.fabricName,
                     this.protectionContainerName,
                     this.ReplicationProtectedItem.Name);
@@ -702,6 +708,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
             }
 
             var response = this.RecoveryServicesClient.StartAzureSiteRecoveryReprotection(
+                Utilities.GetValueFromArmId(
+                    this.ReplicationProtectedItem.ID,
+                    ARMResourceTypeConstants.ResourceGroups),
+                Utilities.GetValueFromArmId(
+                    this.ReplicationProtectedItem.ID,
+                    ARMResourceTypeConstants.RecoveryServicesVault),
                 this.fabricName,
                 this.protectionContainerName,
                 this.ReplicationProtectedItem.Name,
@@ -720,6 +732,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
         {
             // Check if the Recovery Plan contains any InMageAzureV2 and InMage Replication Provider Entities.
             var rp = this.RecoveryServicesClient.GetAzureSiteRecoveryRecoveryPlan(
+                Utilities.GetValueFromArmId(
+                    this.RecoveryPlan.Id,
+                    ARMResourceTypeConstants.ResourceGroups),
+                Utilities.GetValueFromArmId(
+                    this.RecoveryPlan.Id,
+                    ARMResourceTypeConstants.RecoveryServicesVault),
                 this.RecoveryPlan
                     .Name);
 
@@ -740,6 +758,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
 
             var response =
                 this.RecoveryServicesClient.UpdateAzureSiteRecoveryProtection(
+                    Utilities.GetValueFromArmId(
+                        this.RecoveryPlan.Id,
+                        ARMResourceTypeConstants.ResourceGroups),
+                    Utilities.GetValueFromArmId(
+                        this.RecoveryPlan.Id,
+                        ARMResourceTypeConstants.RecoveryServicesVault),    
                     this.RecoveryPlan.Name);
 
             var jobResponse = this.RecoveryServicesClient.GetAzureSiteRecoveryJobDetails(
@@ -789,6 +813,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                 // Fetch the latest Protected item objects
                 var replicationProtectedItemResponse =
                     RecoveryServicesClient.GetAzureSiteRecoveryReplicationProtectedItem(
+                        Utilities.GetValueFromArmId(
+                            this.ReplicationProtectedItem.ID,
+                            ARMResourceTypeConstants.ResourceGroups),
+                        Utilities.GetValueFromArmId(
+                            this.ReplicationProtectedItem.ID,
+                            ARMResourceTypeConstants.RecoveryServicesVault),
                         this.fabricName,
                         this.protectionContainerName,
                         this.ReplicationProtectedItem.Name);
@@ -821,6 +851,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
 
             var response =
                 RecoveryServicesClient.StartSwitchProtection(
+                    Utilities.GetValueFromArmId(
+                        this.ReplicationProtectedItem.ID,
+                        ARMResourceTypeConstants.ResourceGroups),
+                    Utilities.GetValueFromArmId(
+                        this.ReplicationProtectedItem.ID,
+                        ARMResourceTypeConstants.RecoveryServicesVault),
                 this.fabricName,
                 this.protectionContainerName,
                 input);

@@ -172,6 +172,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                 new UpdateRecoveryPlanInput { Properties = updateRecoveryPlanInputProperties };
 
             this.UpdateRecoveryPlan(
+                Utilities.GetValueFromArmId(
+                    asrRecoveryPlan.Id,
+                    ARMResourceTypeConstants.ResourceGroups),
+                Utilities.GetValueFromArmId(
+                    asrRecoveryPlan.Id,
+                    ARMResourceTypeConstants.RecoveryServicesVault),
                 asrRecoveryPlan.Name,
                 updateRecoveryPlanInput);
         }
@@ -189,6 +195,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                 new UpdateRecoveryPlanInput { Properties = updateRecoveryPlanInputProperties };
 
             this.UpdateRecoveryPlan(
+                Utilities.GetValueFromArmId(
+                    recoveryPlan.Id,
+                    ARMResourceTypeConstants.ResourceGroups),
+                Utilities.GetValueFromArmId(
+                    recoveryPlan.Id,
+                    ARMResourceTypeConstants.RecoveryServicesVault),
                 recoveryPlan.Name,
                 updateRecoveryPlanInput);
         }
@@ -197,10 +209,14 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
         ///     Update Replication Plan: Utility call
         /// </summary>
         private void UpdateRecoveryPlan(
+            string resourceGroupName,
+            string vaultName,
             string recoveryPlanName,
             UpdateRecoveryPlanInput updateRecoveryPlanInput)
         {
             var response = this.RecoveryServicesClient.UpdateAzureSiteRecoveryRecoveryPlan(
+                resourceGroupName,
+                vaultName,
                 recoveryPlanName,
                 updateRecoveryPlanInput);
 

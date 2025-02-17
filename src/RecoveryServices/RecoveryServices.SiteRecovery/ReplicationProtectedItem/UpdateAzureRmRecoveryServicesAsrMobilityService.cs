@@ -114,6 +114,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
 
                 // Update the Mobility Service.
                 var response = this.RecoveryServicesClient.UpdateAzureSiteRecoveryMobilityService(
+                    Utilities.GetValueFromArmId(
+                        this.ReplicationProtectedItem.ID,
+                        ARMResourceTypeConstants.ResourceGroups),
+                    Utilities.GetValueFromArmId(
+                        this.ReplicationProtectedItem.ID,
+                        ARMResourceTypeConstants.RecoveryServicesVault),
                     this.fabricName,
                     this.protectionContainerName,
                     this.protectableItemName,

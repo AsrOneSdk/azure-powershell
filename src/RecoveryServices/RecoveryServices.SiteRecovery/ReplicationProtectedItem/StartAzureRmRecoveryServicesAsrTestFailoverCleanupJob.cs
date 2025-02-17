@@ -77,6 +77,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                     case ASRParameterSets.ByRPObject:
                         // Refresh RP Object
                         var rp = this.RecoveryServicesClient.GetAzureSiteRecoveryRecoveryPlan(
+                            Utilities.GetValueFromArmId(
+                                this.RecoveryPlan.Id,
+                                ARMResourceTypeConstants.ResourceGroups),
+                            Utilities.GetValueFromArmId(
+                                this.RecoveryPlan.Id,
+                                ARMResourceTypeConstants.RecoveryServicesVault),   
                             this.RecoveryPlan.Name);
                         this.recoveryPlanName = this.RecoveryPlan.Name;
                         this.StartRpTestFailoverCleanup();
@@ -118,8 +124,18 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
             {
                 Properties = testFailoverCleanupInputProperties
             };
+            
+            var resourceGroupName= Utilities.GetValueFromArmId(
+                this.ReplicationProtectedItem.ID,
+                ARMResourceTypeConstants.ResourceGroups);
+
+            var vaultName = Utilities.GetValueFromArmId(
+                this.ReplicationProtectedItem.ID,
+                ARMResourceTypeConstants.RecoveryServicesVault);
 
             var response = this.RecoveryServicesClient.StartAzureSiteRecoveryTestFailoverCleanup(
+                resourceGroupName,
+                vaultName,
                 this.fabricName,
                 this.protectionContainerName,
                 rpiName,
@@ -150,6 +166,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
             };
 
             var response = this.RecoveryServicesClient.StartAzureSiteRecoveryTestFailoverCleanup(
+                Utilities.GetValueFromArmId(
+                    this.RecoveryPlan.Id,
+                    ARMResourceTypeConstants.ResourceGroups),
+                Utilities.GetValueFromArmId(
+                    this.RecoveryPlan.Id,
+                    ARMResourceTypeConstants.RecoveryServicesVault),
                 this.RecoveryPlan.Name,
                 recoveryPlanTestFailoverCleanupInput);
 

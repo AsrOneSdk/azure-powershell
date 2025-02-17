@@ -352,6 +352,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
 
                 var replicationProtectedItemResponse = this.RecoveryServicesClient
                     .GetAzureSiteRecoveryReplicationProtectedItem(
+                        Utilities.GetValueFromArmId(
+                            rpi.ID,
+                            ARMResourceTypeConstants.ResourceGroups),
+                        Utilities.GetValueFromArmId(
+                            rpi.ID,
+                            ARMResourceTypeConstants.RecoveryServicesVault),
                         fabricName,
                         Utilities.GetValueFromArmId(
                             rpi.ID,
@@ -518,6 +524,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                 new CreateRecoveryPlanInput { Properties = createRecoveryPlanInputProperties };
 
             this.CreateRecoveryPlan(
+                Utilities.GetValueFromArmId(
+                    this.ReplicationProtectedItem[0].ID,
+                    ARMResourceTypeConstants.ResourceGroups),
+                Utilities.GetValueFromArmId(
+                    this.ReplicationProtectedItem[0].ID,
+                    ARMResourceTypeConstants.RecoveryServicesVault),
                 this.Name,
                 createRecoveryPlanInput);
         }
@@ -561,6 +573,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                 new CreateRecoveryPlanInput { Properties = createRecoveryPlanInputProperties };
 
             this.CreateRecoveryPlan(
+                Utilities.GetValueFromArmId(
+                    this.ReplicationProtectedItem[0].ID,
+                    ARMResourceTypeConstants.ResourceGroups),
+                Utilities.GetValueFromArmId(
+                    this.ReplicationProtectedItem[0].ID,
+                    ARMResourceTypeConstants.RecoveryServicesVault),
                 recoveryPlan.Name,
                 createRecoveryPlanInput);
         }
@@ -569,10 +587,14 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
         ///     Create Replication Plan: Utility call
         /// </summary>
         private void CreateRecoveryPlan(
+            string resourceGroupName,
+            string vaultName,
             string recoveryPlanName,
             CreateRecoveryPlanInput createRecoveryPlanInput)
         {
             var response = this.RecoveryServicesClient.CreateAzureSiteRecoveryRecoveryPlan(
+                resourceGroupName,
+                vaultName,
                 recoveryPlanName,
                 createRecoveryPlanInput);
 

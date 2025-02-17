@@ -22,6 +22,7 @@ using Job = Microsoft.Azure.Management.RecoveryServices.SiteRecovery.Models.Job;
 using Microsoft.WindowsAzure.Commands.Utilities.Common;
 using System.Linq;
 using Microsoft.Azure.Commands.ResourceManager.Common.ArgumentCompleters;
+using Microsoft.Azure.Management.WebSites.Version2016_09_01.Models;
 
 namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
 {
@@ -670,6 +671,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                 this.response = this.RecoveryServicesClient.EnableProtection(
                     Utilities.GetValueFromArmId(
                         this.ProtectionContainerMapping.ID,
+                        ARMResourceTypeConstants.ResourceGroups),
+                    Utilities.GetValueFromArmId(
+                        this.ProtectionContainerMapping.ID,
+                        ARMResourceTypeConstants.RecoveryServicesVault),
+                    Utilities.GetValueFromArmId(
+                        this.ProtectionContainerMapping.ID,
                         ARMResourceTypeConstants.ReplicationFabrics),
                     Utilities.GetValueFromArmId(
                         this.ProtectionContainerMapping.ID,
@@ -757,9 +764,17 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                 var protectionContainerName = Utilities.GetValueFromArmId(
                     this.ProtectableItem.ID,
                     ARMResourceTypeConstants.ReplicationProtectionContainers);
+                var resourceGroupName = Utilities.GetValueFromArmId(
+                    this.ProtectableItem.ID,
+                    ARMResourceTypeConstants.ResourceGroups);
+                var vaultName = Utilities.GetValueFromArmId(
+                    this.ProtectableItem.ID,
+                    ARMResourceTypeConstants.RecoveryServicesVault);
                 var listReplicationProtectedItems =
                     this.RecoveryServicesClient
                         .GetAzureSiteRecoveryReplicationProtectedItem(
+                            resourceGroupName,
+                            vaultName,
                             fabricName,
                             protectionContainerName);
 
@@ -1229,9 +1244,17 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                 var protectionContainerName = Utilities.GetValueFromArmId(
                     this.ProtectableItem.ID,
                     ARMResourceTypeConstants.ReplicationProtectionContainers);
+                var resourceGroupName = Utilities.GetValueFromArmId(
+                    this.ProtectableItem.ID,
+                    ARMResourceTypeConstants.ResourceGroups);
+                var vaultName = Utilities.GetValueFromArmId(
+                    this.ProtectableItem.ID,
+                    ARMResourceTypeConstants.RecoveryServicesVault);
                 var listReplicationProtectedItems =
                     this.RecoveryServicesClient
                         .GetAzureSiteRecoveryReplicationProtectedItem(
+                            resourceGroupName,
+                            vaultName,
                             fabricName,
                             protectionContainerName);
 

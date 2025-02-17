@@ -71,7 +71,10 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                 }
 
                 var response =
-                    this.RecoveryServicesClient.RemoveAzureSiteRecoveryRecoveryPlan(this.Name);
+                    this.RecoveryServicesClient.RemoveAzureSiteRecoveryRecoveryPlan(
+                        null,
+                        null,
+                        this.Name);
 
                 var jobResponse = this.RecoveryServicesClient.GetAzureSiteRecoveryJobDetails(
                     PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));

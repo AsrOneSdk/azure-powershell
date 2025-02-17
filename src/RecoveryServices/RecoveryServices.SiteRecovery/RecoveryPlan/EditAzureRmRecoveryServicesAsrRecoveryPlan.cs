@@ -152,6 +152,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
 
                             var replicationProtectedItemResponse = this.RecoveryServicesClient
                                 .GetAzureSiteRecoveryReplicationProtectedItem(
+                                    Utilities.GetValueFromArmId(
+                                        rpi.ID,
+                                        ARMResourceTypeConstants.ResourceGroups),
+                                    Utilities.GetValueFromArmId(
+                                        rpi.ID,
+                                        ARMResourceTypeConstants.RecoveryServicesVault),
                                     fabricName,
                                     Utilities.GetValueFromArmId(
                                         rpi.ID,

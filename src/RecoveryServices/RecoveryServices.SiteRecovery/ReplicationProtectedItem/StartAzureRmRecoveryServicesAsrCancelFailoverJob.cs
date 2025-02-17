@@ -96,6 +96,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
             }
 
             var response = this.RecoveryServicesClient.StartAzureSiteRecoveryCancelFailover(
+                Utilities.GetValueFromArmId(
+                    this.ReplicationProtectedItem.ID,
+                    ARMResourceTypeConstants.ResourceGroups),
+                Utilities.GetValueFromArmId(
+                    this.ReplicationProtectedItem.ID,
+                    ARMResourceTypeConstants.RecoveryServicesVault),
                 this.fabricName,
                 this.protectionContainerName,
                 this.ReplicationProtectedItem.Name);
@@ -112,6 +118,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
         private void StartRpCancelFailover()
         {
             var rp = this.RecoveryServicesClient.GetAzureSiteRecoveryRecoveryPlan(
+                Utilities.GetValueFromArmId(
+                    this.RecoveryPlan.Id,
+                    ARMResourceTypeConstants.ResourceGroups),
+                Utilities.GetValueFromArmId(
+                    this.RecoveryPlan.Id,
+                    ARMResourceTypeConstants.RecoveryServicesVault),
                 this.RecoveryPlan.Name);
 
             foreach (var replicationProvider in rp.Properties.ReplicationProviders)
@@ -131,6 +143,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
 
             var response =
                 this.RecoveryServicesClient.StartAzureSiteRecoveryCancelFailover(
+                    Utilities.GetValueFromArmId(
+                        this.RecoveryPlan.Id,
+                        ARMResourceTypeConstants.ResourceGroups),
+                    Utilities.GetValueFromArmId(
+                        this.RecoveryPlan.Id,
+                        ARMResourceTypeConstants.RecoveryServicesVault),
                     this.RecoveryPlan.Name);
 
             var jobResponse = this.RecoveryServicesClient.GetAzureSiteRecoveryJobDetails(

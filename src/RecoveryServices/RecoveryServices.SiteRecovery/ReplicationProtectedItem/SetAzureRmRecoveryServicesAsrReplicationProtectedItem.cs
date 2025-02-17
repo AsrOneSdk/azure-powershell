@@ -322,6 +322,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                     .GetAzureSiteRecoveryReplicationProtectedItem(
                         Utilities.GetValueFromArmId(
                             this.InputObject.ID,
+                            ARMResourceTypeConstants.ResourceGroups),
+                        Utilities.GetValueFromArmId(
+                            this.InputObject.ID,
+                            ARMResourceTypeConstants.RecoveryServicesVault),
+                        Utilities.GetValueFromArmId(
+                            this.InputObject.ID,
                             ARMResourceTypeConstants.ReplicationFabrics),
                         Utilities.GetValueFromArmId(
                             this.InputObject.ID,
@@ -922,6 +928,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                 };
 
                 var response = this.RecoveryServicesClient.UpdateVmProperties(
+                    Utilities.GetValueFromArmId(
+                        this.InputObject.ID,
+                        ARMResourceTypeConstants.ResourceGroups),
+                    Utilities.GetValueFromArmId(
+                        this.InputObject.ID,
+                        ARMResourceTypeConstants.RecoveryServicesVault),
                     Utilities.GetValueFromArmId(
                         this.InputObject.ID,
                         ARMResourceTypeConstants.ReplicationFabrics),

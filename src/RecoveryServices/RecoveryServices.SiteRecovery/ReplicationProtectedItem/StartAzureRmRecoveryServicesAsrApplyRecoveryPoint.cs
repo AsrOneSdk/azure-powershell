@@ -179,6 +179,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
             }
 
             var response = this.RecoveryServicesClient.StartAzureSiteRecoveryApplyRecoveryPoint(
+                Utilities.GetValueFromArmId(
+                    this.ReplicationProtectedItem.ID,
+                    ARMResourceTypeConstants.ResourceGroups),
+                Utilities.GetValueFromArmId(
+                    this.ReplicationProtectedItem.ID,
+                    ARMResourceTypeConstants.RecoveryServicesVault),
                 this.fabricName,
                 this.protectionContainerName,
                 this.ReplicationProtectedItem.Name,

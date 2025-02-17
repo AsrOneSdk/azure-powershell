@@ -114,6 +114,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                 .GetAzureSiteRecoveryReplicationProtectedItem(
                     Utilities.GetValueFromArmId(
                         this.ProtectionContainer.ID,
+                        ARMResourceTypeConstants.ResourceGroups),
+                    Utilities.GetValueFromArmId(
+                        this.ProtectionContainer.ID,
+                        ARMResourceTypeConstants.RecoveryServicesVault),
+                    Utilities.GetValueFromArmId(
+                        this.ProtectionContainer.ID,
                         ARMResourceTypeConstants.ReplicationFabrics),
                     this.ProtectionContainer.Name);
 
@@ -131,6 +137,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                 .GetAzureSiteRecoveryReplicationProtectedItem(
                     Utilities.GetValueFromArmId(
                         this.ProtectionContainer.ID,
+                        ARMResourceTypeConstants.ResourceGroups),
+                    Utilities.GetValueFromArmId(
+                        this.ProtectionContainer.ID,
+                        ARMResourceTypeConstants.RecoveryServicesVault),
+                    Utilities.GetValueFromArmId(
+                        this.ProtectionContainer.ID,
                         ARMResourceTypeConstants.ReplicationFabrics),
                     this.ProtectionContainer.Name);
             var replicationProtectedItem = replicationProtectedItemListResponse.SingleOrDefault(
@@ -144,6 +156,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
             {
                 var replicationProtectedItemResponse = this.RecoveryServicesClient
                     .GetAzureSiteRecoveryReplicationProtectedItem(
+                        Utilities.GetValueFromArmId(
+                            this.ProtectionContainer.ID,
+                            ARMResourceTypeConstants.ResourceGroups),
+                        Utilities.GetValueFromArmId(
+                            this.ProtectionContainer.ID,
+                            ARMResourceTypeConstants.RecoveryServicesVault),
                         Utilities.GetValueFromArmId(
                             this.ProtectionContainer.ID,
                             ARMResourceTypeConstants.ReplicationFabrics),
@@ -173,6 +191,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
             {
                 var replicationProtectedItemResponse = this.RecoveryServicesClient
                     .GetAzureSiteRecoveryReplicationProtectedItem(
+                        Utilities.GetValueFromArmId(
+                            this.ProtectionContainer.ID,
+                            ARMResourceTypeConstants.ResourceGroups),
+                        Utilities.GetValueFromArmId(
+                            this.ProtectionContainer.ID,
+                            ARMResourceTypeConstants.RecoveryServicesVault),
                         Utilities.GetValueFromArmId(
                             this.ProtectionContainer.ID,
                             ARMResourceTypeConstants.ReplicationFabrics),
@@ -224,6 +248,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
             {
                 var replicationProtectedItemResponse = this.RecoveryServicesClient
                     .GetAzureSiteRecoveryReplicationProtectedItem(
+                        Utilities.GetValueFromArmId(
+                            this.ProtectableItem.ID,
+                            ARMResourceTypeConstants.ResourceGroups),
+                        Utilities.GetValueFromArmId(
+                            this.ProtectableItem.ID,
+                            ARMResourceTypeConstants.RecoveryServicesVault),
                         Utilities.GetValueFromArmId(
                             this.ProtectableItem.ID,
                             ARMResourceTypeConstants.ReplicationFabrics),

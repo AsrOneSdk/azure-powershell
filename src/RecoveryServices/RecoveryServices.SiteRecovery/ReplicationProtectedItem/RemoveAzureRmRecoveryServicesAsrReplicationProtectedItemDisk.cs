@@ -71,6 +71,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                     this.RecoveryServicesClient.RemoveDisks(
                         Utilities.GetValueFromArmId(
                             this.InputObject.ID,
+                            ARMResourceTypeConstants.ResourceGroups),
+                        Utilities.GetValueFromArmId(
+                            this.InputObject.ID,
+                            ARMResourceTypeConstants.RecoveryServicesVault),
+                        Utilities.GetValueFromArmId(
+                            this.InputObject.ID,
                             ARMResourceTypeConstants.ReplicationFabrics),
                         Utilities.GetValueFromArmId(
                             this.InputObject.ID,

@@ -113,12 +113,26 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                         recoveryPlan.Properties.FriendlyName,
                         StringComparison.OrdinalIgnoreCase))
                 {
+                    var resourceGroupName = Utilities.GetValueFromArmId(
+                        recoveryPlan.Id,
+                        ARMResourceTypeConstants.ResourceGroups);
+                    var vaultName = Utilities.GetValueFromArmId(
+                        recoveryPlan.Id,
+                        ARMResourceTypeConstants.RecoveryServicesVault);
                     var rp = this.RecoveryServicesClient.GetAzureSiteRecoveryRecoveryPlan(
+                        resourceGroupName,
+                        vaultName,
                         recoveryPlan.Name);
-                    this.WriteRecoveryPlan(rp);
+                    this.WriteRecoveryPlan(
+                        resourceGroupName,
+                        vaultName,
+                        rp);
                     if (!string.IsNullOrEmpty(this.Path))
                     {
-                        this.GetRecoveryPlanFile(rp);
+                        this.GetRecoveryPlanFile(
+                            resourceGroupName,
+                            vaultName,
+                            rp);
                     }
 
                     found = true;
@@ -143,15 +157,29 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
             try
             {
                 var recoveryPlanResponse = this.RecoveryServicesClient
-                    .GetAzureSiteRecoveryRecoveryPlan(this.Name);
-
+                    .GetAzureSiteRecoveryRecoveryPlan(null, null, this.Name);
+                
                 if (recoveryPlanResponse != null)
                 {
-                    this.WriteRecoveryPlan(recoveryPlanResponse);
+                    this.WriteRecoveryPlan(
+                        Utilities.GetValueFromArmId(
+                            recoveryPlanResponse.Id,
+                            ARMResourceTypeConstants.ResourceGroups),
+                        Utilities.GetValueFromArmId(
+                            recoveryPlanResponse.Id,
+                            ARMResourceTypeConstants.RecoveryServicesVault),
+                        recoveryPlanResponse);
 
                     if (!string.IsNullOrEmpty(this.Path))
                     {
-                        this.GetRecoveryPlanFile(recoveryPlanResponse);
+                        this.GetRecoveryPlanFile(
+                            Utilities.GetValueFromArmId(
+                            recoveryPlanResponse.Id,
+                            ARMResourceTypeConstants.ResourceGroups),
+                        Utilities.GetValueFromArmId(
+                            recoveryPlanResponse.Id,
+                            ARMResourceTypeConstants.RecoveryServicesVault), 
+                        recoveryPlanResponse);
                     }
                 }
             }
@@ -175,10 +203,15 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
         }
 
         private void GetRecoveryPlanFile(
+            string resourceGroupName,
+            string vaultName,
             RecoveryPlan recoveryPlan)
         {
             recoveryPlan =
-                this.RecoveryServicesClient.GetAzureSiteRecoveryRecoveryPlan(recoveryPlan.Name);
+                this.RecoveryServicesClient.GetAzureSiteRecoveryRecoveryPlan(
+                    resourceGroupName,
+                    vaultName,
+                    recoveryPlan.Name);
 
             if (string.IsNullOrEmpty(this.Path) ||
                 !Directory.Exists(System.IO.Path.GetDirectoryName(this.Path)))
@@ -206,12 +239,19 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
         /// <summary>
         ///     Write Recovery Plan.
         /// </summary>
+        /// <param name="resourceGroupName"></param>
+        /// <param name="vaultName"></param>
         /// <param name="recoveryPlan">Recovery Plan object</param>
         private void WriteRecoveryPlan(
+            string resourceGroupName,
+            string vaultName,
             RecoveryPlan recoveryPlan)
         {
             var replicationProtectedItemListResponse = this.RecoveryServicesClient
-                .GetAzureSiteRecoveryReplicationProtectedItemInRP(recoveryPlan.Name);
+                .GetAzureSiteRecoveryReplicationProtectedItemInRP(
+                    resourceGroupName,
+                    vaultName,
+                    recoveryPlan.Name);
             this.WriteObject(
                 new ASRRecoveryPlan(
                     recoveryPlan,
@@ -231,6 +271,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
             {
                 var replicationProtectedItemListResponse =
                     this.RecoveryServicesClient.GetAzureSiteRecoveryReplicationProtectedItemInRP(
+                        null,
+                        null,
                         recoveryPlan.Name);
                 asrRecoveryPlans.Add(
                     new ASRRecoveryPlan(

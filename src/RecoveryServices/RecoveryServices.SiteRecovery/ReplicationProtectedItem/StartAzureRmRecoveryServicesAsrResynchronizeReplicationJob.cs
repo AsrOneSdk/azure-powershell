@@ -92,6 +92,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.SiteRecovery
                 
                 // Resync Replication of the Protected Item.
                 var response = this.RecoveryServicesClient.StartAzureSiteRecoveryResynchronizeReplication(
+                    Utilities.GetValueFromArmId(
+                        this.ReplicationProtectedItem.ID,
+                        ARMResourceTypeConstants.ResourceGroups),
+                    Utilities.GetValueFromArmId(
+                        this.ReplicationProtectedItem.ID,
+                        ARMResourceTypeConstants.RecoveryServicesVault),
                     this.fabricName,
                     this.protectionContainerName,
                     this.rpiName);
