@@ -193,6 +193,20 @@ function New-AzMigrateServerReplication {
         # Specifies the Operating System disk for the source server to be migrated.
         ${OSDiskID},
 
+        [ValidateSet("Standard" , "TrustedLaunch")]
+        [ArgumentCompleter( { "Standard" , "TrustedLaunch" })]
+        [Microsoft.Azure.PowerShell.Cmdlets.Migrate.Category('Path')]
+        [System.String]
+        # Specifies the security type for the Azure VM.
+        ${TargetSecurityType},
+
+        [ValidateSet("true" , "false")]
+        [ArgumentCompleter( { "true" , "false" })]
+        [Microsoft.Azure.PowerShell.Cmdlets.Migrate.Category('Path')]
+        [System.String]
+        # Specifies if secure boot needs to be enabled on target VM.
+        ${TargetVMSecureBootEnabled},
+
         [Parameter(ParameterSetName = 'ByIdDefaultUser')]
         [Parameter(ParameterSetName = 'ByInputObjectDefaultUser')]
         [Microsoft.Azure.PowerShell.Cmdlets.Migrate.Category('Path')]
@@ -270,6 +284,8 @@ function New-AzMigrateServerReplication {
         $HasResync = $PSBoundParameters.ContainsKey('PerformAutoResync')
         $HasDiskEncryptionSetID = $PSBoundParameters.ContainsKey('DiskEncryptionSetID')
         $HasTargetVMSize = $PSBoundParameters.ContainsKey('TargetVMSize')
+        $HasTargetSecurityType = $PSBoundParameters.ContainsKey('TargetSecurityType')
+        $HasTargetVMSecureBootEnabled = $PSBoundParameters.ContainsKey('TargetVMSecureBootEnabled')
 
         $null = $PSBoundParameters.Remove('ReplicationContainerMapping')
         $null = $PSBoundParameters.Remove('VMWarerunasaccountID')
@@ -296,6 +312,8 @@ function New-AzMigrateServerReplication {
         $null = $PSBoundParameters.Remove('LinuxLicenseType')
         $null = $PSBoundParameters.Remove('LicenseType')
         $null = $PSBoundParameters.Remove('DiskEncryptionSetID')
+        $null = $PSBoundParameters.Remove('TargetSecurityType')
+        $null = $PSBoundParameters.Remove('TargetVMSecureBootEnabled')
 
         $null = $PSBoundParameters.Remove('MachineId')
         $null = $PSBoundParameters.Remove('InputObject')
@@ -436,7 +454,7 @@ function New-AzMigrateServerReplication {
         if ($FabricName -eq "") {
             throw "Fabric not found for given resource group."
         }
-                
+
         $null = $PSBoundParameters.Add('FabricName', $FabricName)
         $peContainers = Az.Migrate\Get-AzMigrateReplicationProtectionContainer @PSBoundParameters
         $ProtectionContainerName = ""
@@ -549,6 +567,19 @@ public static int hashForArtifact(String artifact)
         $ProviderSpecificDetails.InstanceType = 'VMwareCbt'
         $ProviderSpecificDetails.LicenseType = $LicenseType
         $ProviderSpecificDetails.PerformAutoResync = $PerformAutoResync
+        if ($HasTargetVMSecureBootEnabled) {
+            $ProviderSpecificDetails.TargetVMSecurityProfileIsTargetVmsecureBootEnabled = $TargetVMSecureBootEnabled
+        } elseif ($TargetSecurityType -eq "TrustedLaunch") {
+            $ProviderSpecificDetails.TargetVMSecurityProfileIsTargetVmsecureBootEnabled = "true"
+        }
+
+        if ($HasTargetSecurityType -and $TargetSecurityType -ne "Standard") {
+            $ProviderSpecificDetails.TargetVMSecurityProfileTargetVmsecurityType = $TargetSecurityType
+            $ProviderSpecificDetails.TargetVMSecurityProfileIsTargetVmtpmEnabled = $true
+        } elseif ($HasTargetVMSecureBootEnabled) {
+            throw "SecureBoot is supported only when security type is trusted launch virtual machine."
+        }
+        
         if ($HasTargetAVSet) {
             $ProviderSpecificDetails.TargetAvailabilitySetId = $TargetAvailabilitySet
         }
@@ -659,6 +690,7 @@ public static int hashForArtifact(String artifact)
         }
 
         Import-Module Az.Resources
+        Import-Module Az.Compute
         $vmId = $ProviderSpecificDetails.TargetResourceGroupId + "/providers/Microsoft.Compute/virtualMachines/" + $TargetVMName
         $VMNamePresentinRg = Get-AzResource -ResourceId $vmId -ErrorVariable notPresent -ErrorAction SilentlyContinue
         if ($VMNamePresentinRg) {
@@ -684,9 +716,6 @@ public static int hashForArtifact(String artifact)
                     $DiskObject.IsOSDisk = "false"
                     $DiskObject.LogStorageAccountSasSecretName = $LogStorageAccountSas
                     $DiskObject.LogStorageAccountId = $LogStorageAccountID
-                    if ($HasDiskEncryptionSetID) {
-                        $DiskObject.DiskEncryptionSetId = $DiskEncryptionSetID
-                    }
                     $DiskToInclude += $DiskObject
                 }
             }
@@ -744,7 +773,5 @@ public static int hashForArtifact(String artifact)
         $null = $PSBoundParameters.Add('ResourceGroupName', $ResourceGroupName)
         
         return Az.Migrate.internal\Get-AzMigrateReplicationJob @PSBoundParameters
-        
     }
-
-}   
+}
